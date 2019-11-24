@@ -1,13 +1,5 @@
 {
   "rules": {
-    "users": {
-      "$uid": {
-        ".read": "auth.uid === $uid",
-        ".write": "auth.uid === $uid",
-        "messages": {
-          ".indexOn": ["category"]
-        }
-      }
-    }
+
   }
 }
