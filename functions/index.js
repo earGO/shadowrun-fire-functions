@@ -7,8 +7,10 @@ const express = require('express');
 const app = express();
 const db = admin.firestore();
 
-const controlVisibility = require('./user_controllers/controlVisibility');
-const onLogin = require('./user_controllers/onLogin')
+const addToVisible = require('./user_controllers/addToVisible');
+const onLogin = require('./user_controllers/onLogin');
+const fetchUser = require('./user_controllers/fetchUser');
+const removeFromVisible = require('./user_controllers/removeFromVisible');
 
 const authenticate = async (req, res, next) => {
     if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) {
@@ -33,6 +35,9 @@ const authenticate = async (req, res, next) => {
 
 app.post('/onLogin',(req,res)=> onLogin(req,res,db));
 
-app.post('/controlVisibility',controlVisibility);
+app.post('/addToVisible',(req,res)=>addToVisible(req,res,db,admin));
+app.post('/removeFromVisible',(req,res)=>removeFromVisible(req,res,db,admin));
+
+app.post('/fetchUser',(req,res)=>fetchUser(req,res,db));
 
 exports.api = functions.https.onRequest(app);

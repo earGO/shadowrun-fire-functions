@@ -1,38 +1,49 @@
-async function onLogin  (req, res,db) {
-    console.log(req.body);
+async function onLogin (req, res,db) {
+    console.log('got request as ',req.body);
     const usersRef = db.collection('users');
+    let user={}
     try {
-        const user = JSON.parse(req.body).user;
-        const {uid,email,displayName,photoUrl} = user;
-        let result = await usersRef.where('uid', '==', uid).get();
-        if(result.empty){
-            console.log('no such user');
-            await usersRef.doc(uid).set({
-                uid:uid,
-                email:email,
-                name:displayName,
-                avatar:photoUrl,
-                wantToBeHammered:false,
-                wantToCommunicate:false,
-            });
-            try{
-                const createdUser = await usersRef.where('uid','==',uid)
-                    .get();
-                const userData = createdUser.docs[0].data();
-                res.status(201).json({message:'created user',user:userData});
-            } catch (error){
-                console.log(error);
-                res.send(error)
-            }
-        } else {
-            const user = result.docs[0].data();
-            console.log(user);
-            res.status(201).json({mesage:'found user',user:user});
-        }
+         user = JSON.parse(req.body).user;
+        console.log('parsed user uid as: ', user.uid);
     } catch(error) {
-        console.log('Something is wrong with the request', error.uid);
-        res.sendStatus(500).json({message:'somethng wrong with request'});
+    console.log('Something is wrong with the request', error.uid);
+    res.sendStatus(500).json(JSON.stringify({message:'somethng wrong with request'}));
     }
-};
+    try {
+            let docRef = usersRef.doc(user.uid);
+            console.log('tryin to fetch user from database')
+            const fetchedUser = await docRef.get();
+            console.log(`fetchedUser be like: ${fetchedUser}`)
+            if(fetchedUser.data()===undefined) {
+                console.log('user undefned, creating')
+                console.log(user.photoUrl)
+                await usersRef.doc(user.uid).set({
+                    uid:user.uid,
+                    email:user.email,
+                    name:user.displayName,
+                    avatar:user.photoUrl,
+                    wantToBeHammered:false,
+                    wantToCommunicate:false,
+                    visible:false,
+                    credits:0
+                });
+                console.log('trying to fetch newly crated user');
+                const createdUser = await usersRef.doc(user.uid)
+                    .get();
+                const userData = await createdUser.data()
+                console.log(`created user data be like ${userData}`);
+                res.send({user:userData});
+            } else {
+                let fetchedUserToSend = await fetchedUser.data();
+                res.send({user:fetchedUserToSend})
+            }
+    }
+    catch (error) {
+        console.log('something went wrong',error)
+        res.send({msg:'smth broken :(',error:error})
+
+    }
+
+}
 
 module.exports = onLogin;
