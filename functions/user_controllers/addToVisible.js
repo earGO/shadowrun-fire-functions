@@ -1,7 +1,8 @@
 async function addToVisible (req,res,db,admin){
-    const {ownerId,arrayId} = JSON.parse(req.body);
-    const visibilityRef = db.collection('visibility');
     try{
+        const {ownerId,arrayId} = JSON.parse(req.body);
+        console.log(`addToVisible called sit ${ownerId} as owner id, and ${arrayId} ass array ID`)
+        const visibilityRef = db.collection('visibility');
         let userSeesIDs = await visibilityRef.doc(arrayId);
         const testData = await userSeesIDs.get();
         if(testData.data()!==undefined){
@@ -13,15 +14,14 @@ async function addToVisible (req,res,db,admin){
         } else {
            let newVisibility = await visibilityRef.doc(arrayId).set({
                sees:[ownerId]
-           })
+           });
             console.log(newVisibility);
         }
-
+        res.send({message:'good'})
     } catch(e){
-        console.log(e)
+        console.log(e);
+        e!==null ? res.send({message:'bad'}) : console.log('all sweet')
     }
-    console.log('controlVisibility working!')
-    res.send('response from controlVisibility')
 }
 
 module.exports = addToVisible;
