@@ -15,7 +15,7 @@ async function fetchOutsideLocations (req,res,db){
         const arrayOfBatches = await thirdPartyResponse.map( async location=> {
             const docId = location.id.toString();
             const label = location.label;
-            const locationId = location['location_id'];
+            const locationId = location['location_id'].toString();
             const bssid = location.bssid;
             const ssid = location.ssid;
             let locRef = await db.collection('locations').doc(docId).set({bssid:bssid,ssid:ssid,label:label,locationId:locationId});

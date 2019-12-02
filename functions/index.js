@@ -21,6 +21,8 @@ const updateUserName = require('./user_controllers/updateUserName');
 /** locations controllers */
 const fetchOutsideLocations = require('./location_controllers/fetchOutsideLocations');
 const getAllLocations = require('./location_controllers/getAllLocations');
+const getLocationById = require('./location_controllers/getLocationById');
+const checkMeIn = require('./location_controllers/checkMeIn');
 
 const authenticate = async (req, res, next) => {
     if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) {
@@ -55,5 +57,6 @@ app.post('/fetchUser',(req,res)=>fetchUser(req,res,db));
 
 app.get('/fetchOutsideLocations',(req,res)=>fetchOutsideLocations(req,res,db));
 app.get('/getAllLocations',(req,res)=>getAllLocations(req,res,db));
-
+app.post('/getLocationById',(req,res)=>getLocationById(req,res,db));
+app.post('/checkMeIn',(req,res)=>checkMeIn(req,res,db));
 exports.api = functions.https.onRequest(app);
