@@ -34,6 +34,11 @@ async function onLogin(req, res, db) {
       const createdUser = await usersRef.doc(user.uid).get();
       const userData = await createdUser.data();
       console.log(`created user data be like ${userData}`);
+      const visibilityRef = db.collection('visibility');
+      const setEmptyVisibility = await visibilityRef.doc(userData.uid).set({
+        sees: [],
+      });
+      console.log(setEmptyVisibility);
       res.send({ user: userData });
     } else {
       let fetchedUserToSend = await fetchedUser.data();
