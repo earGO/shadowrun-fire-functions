@@ -22,10 +22,12 @@ const hideFromEveryone = require('./user_controllers/hideFromEveryone');
 
 /** locations controllers */
 const fetchOutsideLocations = require('./location_controllers/fetchOutsideLocations');
+const clearAllButBlincomAndTest = require('./location_controllers/clearAllButBlincomAndTest');
 const getAllLocations = require('./location_controllers/getAllLocations');
 const getLocationById = require('./location_controllers/getLocationById');
 const checkMeIn = require('./location_controllers/checkMeIn');
 const backgroundLocation = require('./location_controllers/backgroundLocation');
+const giveReward = require('./user_controllers/giveReward');
 
 const authenticate = async (req, res, next) => {
   if (
@@ -64,11 +66,15 @@ app.post('/updateUserName', (req, res) => updateUserName(req, res, db));
 app.post('/fetchUser', (req, res) => fetchUser(req, res, db));
 app.post('/makeVisibleToAll', (req, res) => makeVisibleToAll(req, res, db));
 app.post('/hideFromEveryone', (req, res) => hideFromEveryone(req, res, db));
+app.post('/giveReward', (req, res) => giveReward(req, res, db));
 
 app.get('/fetchOutsideLocations', (req, res) =>
   fetchOutsideLocations(req, res, db)
 );
-app.get('/getAllLocations', (req, res) => getAllLocations(req, res, db));
+app.post('/getAllLocations', (req, res) => getAllLocations(req, res, db));
+app.get('/clearAllButBlincomAndTest', (req, res) =>
+  clearAllButBlincomAndTest(req, res, db)
+);
 app.post('/getLocationById', (req, res) => getLocationById(req, res, db));
 app.post('/checkMeIn', (req, res) => checkMeIn(req, res, db));
 app.post('/backgroundLocation', (req, res) => backgroundLocation(req, res, db));

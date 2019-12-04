@@ -10,28 +10,28 @@ async function fetchOutsideLocations(req, res, db) {
       json: true, // Automatically parses the JSON string in the response
     };
     const thirdPartyResponse = await rp(options);
-    console.log(thirdPartyResponse);
-    const arrayOfBatches = await thirdPartyResponse.map(async location => {
+    console.log(thirdPartyResponse[0]);
+    let batch = db.batch();
+    await thirdPartyResponse.forEach(location => {
       const docId = location.id.toString();
       const label = location.label;
-      const locationId = location['location_id'].toString();
+      const locationId =
+        location['location_id'] === null
+          ? 'null'
+          : location['location_id'].toString();
       const bssid = location.bssid;
       const ssid = location.ssid;
-      let locRef = await db
-        .collection('locations')
-        .doc(docId)
-        .set({
-          bssid: bssid,
-          ssid: ssid,
-          label: label,
-          locationId: locationId,
-        });
-
-      console.log(docId);
-      return locRef;
+      let locRef = db.collection('locations').doc(docId);
+      batch.set(locRef, {
+        bssid: bssid,
+        ssid: ssid,
+        label: label,
+        locationId: locationId,
+        checkedIn: {},
+      });
     });
-    const resolved = await Promise.all(arrayOfBatches);
-    res.send({ message: 'good', resolved });
+    await batch.commit();
+    res.send({ message: 'good' });
   } catch (e) {
     console.log(e);
     res.send({ message: 'bad' });
