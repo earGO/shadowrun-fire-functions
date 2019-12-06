@@ -6,9 +6,10 @@ async function clearAllButBlincomAndTest(req, res, db) {
     locationsToDelete.forEach(doc => {
       const data = doc.data();
       if (
-        parseInt(data.locationId) > 30 ||
-        parseInt(data.locationId) === null ||
-        parseInt(data.locationId) === undefined
+        parseInt(data.locationId) !== 29 &&
+        (parseInt(data.locationId) > 20 ||
+          parseInt(data.locationId) === null ||
+          parseInt(data.locationId) === undefined)
       ) {
         let deleteRef = locationsRef.doc(data.locationId);
         batch.delete(deleteRef);

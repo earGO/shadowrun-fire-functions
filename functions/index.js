@@ -19,6 +19,7 @@ const toggleCommunicate = require('./user_controllers/toggleCommunicate');
 const updateUserName = require('./user_controllers/updateUserName');
 const makeVisibleToAll = require('./user_controllers/makeVisibleToAll');
 const hideFromEveryone = require('./user_controllers/hideFromEveryone');
+const addFieldToAllUsers = require('./user_controllers/addFieldToAllUsers');
 
 /** locations controllers */
 const fetchOutsideLocations = require('./location_controllers/fetchOutsideLocations');
@@ -28,6 +29,10 @@ const getLocationById = require('./location_controllers/getLocationById');
 const checkMeIn = require('./location_controllers/checkMeIn');
 const backgroundLocation = require('./location_controllers/backgroundLocation');
 const giveReward = require('./user_controllers/giveReward');
+
+/** implants controller */
+const getAllImplants = require('./implants/getAllImplants');
+const buyImplant = require('./implants/buyImplant');
 
 const authenticate = async (req, res, next) => {
   if (
@@ -67,6 +72,7 @@ app.post('/fetchUser', (req, res) => fetchUser(req, res, db));
 app.post('/makeVisibleToAll', (req, res) => makeVisibleToAll(req, res, db));
 app.post('/hideFromEveryone', (req, res) => hideFromEveryone(req, res, db));
 app.post('/giveReward', (req, res) => giveReward(req, res, db));
+app.post('/addFieldToAllUsers', (req, res) => addFieldToAllUsers(req, res, db));
 
 app.get('/fetchOutsideLocations', (req, res) =>
   fetchOutsideLocations(req, res, db)
@@ -78,5 +84,8 @@ app.get('/clearAllButBlincomAndTest', (req, res) =>
 app.post('/getLocationById', (req, res) => getLocationById(req, res, db));
 app.post('/checkMeIn', (req, res) => checkMeIn(req, res, db));
 app.post('/backgroundLocation', (req, res) => backgroundLocation(req, res, db));
+
+app.get('/getAllImplants', (req, res) => getAllImplants(req, res, db));
+app.post('/buyImplant', (req, res) => buyImplant(req, res, db));
 
 exports.api = functions.https.onRequest(app);

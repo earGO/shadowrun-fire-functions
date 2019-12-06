@@ -11,24 +11,8 @@ async function getAllUsers(req, res, db, admin) {
         intermediate.push(doc.data());
       }
     });
-    const locationsRef = db.collection('locations');
-    const locationsData = await locationsRef.get();
-    let locationsArray = {};
-    locationsData.forEach(location => {
-      const locationData = location.data();
-      locationsArray[locationData.locationId] = locationData;
-    });
-    let response = [];
-    intermediate.forEach(user => {
-      if (user.currentLocationId !== '') {
-        const userLocation = locationsArray[user.currentLocationId]['label'];
-        user.currentLocationId = userLocation;
-        response.push(user);
-      } else {
-        response.push(user);
-      }
-    });
-    res.send({ users: [...response], message: 'good' });
+
+    res.send({ users: [...intermediate], message: 'good' });
   } catch (e) {
     console.log(e);
     res.send({ message: 'error', users: [] });

@@ -18,24 +18,7 @@ async function getVisibleUsers(req, res, db) {
       )
         intermediate.push(user.data());
     });
-    console.log(intermediate);
-    const locationsRef = db.collection('locations');
-    const locationsData = await locationsRef.get();
-    let locationsArray = {};
-    locationsData.forEach(location => {
-      const locationData = location.data();
-      locationsArray[locationData.locationId] = locationData;
-    });
-    console.log(locationsArray[0]);
-    let response = [];
-    intermediate.forEach(user => {
-      if (user.currentLocationId !== '') {
-        const userLocation = locationsArray[user.currentLocationId]['label'];
-        user.currentLocationId = userLocation;
-        response.push(user);
-      }
-    });
-    res.send({ message: 'good', users: [...response] });
+    res.send({ message: 'good', users: [...intermediate] });
   } catch (e) {
     console.log(e);
     res.send({ message: 'bad', users: [] });
