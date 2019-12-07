@@ -20,6 +20,7 @@ const updateUserName = require('./user_controllers/updateUserName');
 const makeVisibleToAll = require('./user_controllers/makeVisibleToAll');
 const hideFromEveryone = require('./user_controllers/hideFromEveryone');
 const addFieldToAllUsers = require('./user_controllers/addFieldToAllUsers');
+const giveReward = require('./user_controllers/giveReward');
 
 /** locations controllers */
 const fetchOutsideLocations = require('./location_controllers/fetchOutsideLocations');
@@ -28,11 +29,17 @@ const getAllLocations = require('./location_controllers/getAllLocations');
 const getLocationById = require('./location_controllers/getLocationById');
 const checkMeIn = require('./location_controllers/checkMeIn');
 const backgroundLocation = require('./location_controllers/backgroundLocation');
-const giveReward = require('./user_controllers/giveReward');
+const renameLocation = require('./location_controllers/renameLocation');
 
 /** implants controller */
 const getAllImplants = require('./implants/getAllImplants');
 const buyImplant = require('./implants/buyImplant');
+const getInstalledImplants = require('./implants/getInstalledImplants');
+
+/** messages controller */
+const createNewMessage = require('./messages/createNewMessage');
+const getAllMessages = require('./messages/getAllMessages');
+const dismissOneMessage = require('./messages/dismissOneMessage');
 
 const authenticate = async (req, res, next) => {
   if (
@@ -84,8 +91,16 @@ app.get('/clearAllButBlincomAndTest', (req, res) =>
 app.post('/getLocationById', (req, res) => getLocationById(req, res, db));
 app.post('/checkMeIn', (req, res) => checkMeIn(req, res, db));
 app.post('/backgroundLocation', (req, res) => backgroundLocation(req, res, db));
+app.post('/renameLocation', (req, res) => renameLocation(req, res, db));
 
 app.get('/getAllImplants', (req, res) => getAllImplants(req, res, db));
 app.post('/buyImplant', (req, res) => buyImplant(req, res, db));
+app.post('/getInstalledImplants', (req, res) =>
+  getInstalledImplants(req, res, db)
+);
+
+app.post('/createNewMessage', (req, res) => createNewMessage(req, res, db));
+app.post('/getAllMessages', (req, res) => getAllMessages(req, res, db));
+app.post('/dismissOneMessage', (res, req) => dismissOneMessage(res, req, db));
 
 exports.api = functions.https.onRequest(app);

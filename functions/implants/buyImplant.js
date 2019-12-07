@@ -21,9 +21,10 @@ async function buyImplant(req, res, db) {
       implants: implants,
       status: status,
     });
-
+    console.log('all is good with buyImplant');
     res.send({ message: 'good' });
   } catch (e) {
+    console.log(`error at buyImplant function: ${e}`);
     res.send({ message: 'bad' });
   }
 }

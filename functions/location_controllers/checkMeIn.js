@@ -11,7 +11,7 @@ async function checkMeIn(req, res, db) {
     console.log(
       `precheckin location status ${updatedLocation.checkedIn[userId]}`
     );
-    updatedLocation.checkedIn[userId] = checkInTime + 1800000;
+    updatedLocation.checkedIn[userId] = checkInTime + 600000;
     console.log(`post check in ${updatedLocation.checkedIn[userId]}`);
     const timerUpdated = await locationRef.update(updatedLocation);
     const checkinDate = new Date(checkInTime);
