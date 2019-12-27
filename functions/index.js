@@ -41,6 +41,15 @@ const createNewMessage = require('./messages/createNewMessage');
 const getAllMessages = require('./messages/getAllMessages');
 const dismissOneMessage = require('./messages/dismissOneMessage');
 
+/**  cloud messaging*/
+const sendCloudDataMessage = require('./mesaging/sendCloudDataMessage');
+
+/** joinRpg */
+const getAccessToken = require('./joinrpg/getAccessToken');
+
+/** experimental functions */
+const experimental = require('./joinrpg/experimental');
+
 const authenticate = async (req, res, next) => {
   if (
     !req.headers.authorization ||
@@ -79,7 +88,9 @@ app.post('/fetchUser', (req, res) => fetchUser(req, res, db));
 app.post('/makeVisibleToAll', (req, res) => makeVisibleToAll(req, res, db));
 app.post('/hideFromEveryone', (req, res) => hideFromEveryone(req, res, db));
 app.post('/giveReward', (req, res) => giveReward(req, res, db));
-app.post('/addFieldToAllUsers', (req, res) => addFieldToAllUsers(req, res, db));
+app.post('/addFieldToAllUsers', (req, res) =>
+  addFieldToAllUsers(req, res, functions)
+);
 
 app.get('/fetchOutsideLocations', (req, res) =>
   fetchOutsideLocations(req, res, db)
@@ -102,5 +113,12 @@ app.post('/getInstalledImplants', (req, res) =>
 app.post('/createNewMessage', (req, res) => createNewMessage(req, res, db));
 app.post('/getAllMessages', (req, res) => getAllMessages(req, res, db));
 app.post('/dismissOneMessage', (res, req) => dismissOneMessage(res, req, db));
+
+app.post('/sendCloudDataMessage', (req, res) =>
+  sendCloudDataMessage(req, res, admin)
+);
+
+app.get('/getAccessToken', (req, res) => getAccessToken(req, res, db));
+app.get('/experimental',(req,res)=>experimental(req,res,db));
 
 exports.api = functions.https.onRequest(app);
